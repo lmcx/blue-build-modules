@@ -85,7 +85,7 @@ $images | par-each { |img|
 
     print $"(ansi cyan)Pushing image:(ansi reset) ($env.REGISTRY)/modules/($img.name)"
     let digest = (
-        docker push --all-tags $"($env.REGISTRY)/modules/($img.name)"
+        docker push --platform $"linux/($env.ARCH)" --all-tags $"($env.REGISTRY)/modules/($img.name)"
             | split row "\n"  | last | split row " " | get 2 # parse push output to get digest for signing
     )
 
