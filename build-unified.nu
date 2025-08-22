@@ -42,7 +42,7 @@ let tags = (
 
 print $"(ansi green_bold)Generated tags for image:(ansi reset) ($tags | str join ' ')"
 
-(docker buildx build --metadata-file metadata.json --platform linux/arm64,linux/amd64 . --push
+(docker buildx build --metadata-file metadata.json --platform linux/arm64,linux/amd64 --provenance=false --sbom=false . --push
     -f ./unified.Containerfile
     ...($tags | each { |tag| ["-t", $"($env.REGISTRY)/modules:($tag)"] } | flatten) # generate and spread list of tags
 )
