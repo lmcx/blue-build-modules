@@ -42,16 +42,12 @@ let tags = (
 
 print $"(ansi green_bold)Generated tags for image:(ansi reset) ($tags | str join ' ')"
 
-(docker build .
+(docker buildx build --metadata-file metadata.json --platform linux/arm64,linux/amd64 . --push
     -f ./unified.Containerfile
     ...($tags | each { |tag| ["-t", $"($env.REGISTRY)/modules:($tag)"] } | flatten) # generate and spread list of tags
 )
 
-print $"(ansi cyan)Pushing image:(ansi reset) ($env.REGISTRY)/modules"
-let digest = (
-    docker push --all-tags $"($env.REGISTRY)/modules"
-        | split row "\n"  | last | split row " " | get 2 # parse push output to get digest for signing
-)
+let digest = open metadata.json | get "containerimage.digest"
 
 print $"(ansi cyan)Signing image:(ansi reset) ($env.REGISTRY)/modules@($digest)"
 cosign sign -y --key env://COSIGN_PRIVATE_KEY $"($env.REGISTRY)/modules@($digest)"
