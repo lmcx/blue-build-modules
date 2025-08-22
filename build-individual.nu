@@ -77,7 +77,7 @@ print $"(ansi green_bold)Starting image build(ansi reset)"
 $images | par-each { |img|
 
     print $"(ansi cyan)Building and pushing image:(ansi reset) modules/($img.name)"
-    (docker buildx build --metadata-file metadata.json --platform linux/arm64,linux/amd64 .
+    (docker buildx build --metadata-file metadata.json --platform linux/arm64,linux/amd64 --provenance=false --sbom=false .
         -f ./individual.Containerfile
         ...($img.tags | each { |tag| ["-t", $"($env.REGISTRY)/modules/($img.name):($tag)"] } | flatten) # generate and spread list of tags
         --build-arg $"DIRECTORY=($img.directory)"
