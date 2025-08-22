@@ -87,7 +87,7 @@ $images | par-each { |img|
     print "Metadata ::"
     open metadata.json | print
     print "Digest ::::"
-    open metadata.json | get containerimage | print
+    open metadata.json | get containerimage.descriptor | print
     print ":::::::::::"
 
 #    print $"(ansi cyan)Signing image:(ansi reset) ($env.REGISTRY)/modules/($img.name)@($digest)"
