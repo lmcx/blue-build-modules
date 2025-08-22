@@ -84,9 +84,11 @@ $images | par-each { |img|
         --build-arg $"NAME=($img.name)"
         --push)
     
-    print "Digest :::"
+    print "Metadata ::"
     open metadata.json | print
-    print "::::::::::"
+    print "Digest ::::"
+    open metadata.json | get containerimage.digest | print
+    print ":::::::::::"
 
 #    print $"(ansi cyan)Signing image:(ansi reset) ($env.REGISTRY)/modules/($img.name)@($digest)"
 #    cosign sign -y --key env://COSIGN_PRIVATE_KEY $"($env.REGISTRY)/modules/($img.name)@($digest)"
