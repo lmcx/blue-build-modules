@@ -81,13 +81,8 @@ $images | par-each { |img|
         -f ./individual.Containerfile
         ...($img.tags | each { |tag| ["-t", $"($env.REGISTRY)/modules/($img.name):($tag)"] } | flatten) # generate and spread list of tags
         --build-arg $"DIRECTORY=($img.directory)"
-        --build-arg $"NAME=($img.name)")
-
-    print $"(ansi cyan)Pushing image:(ansi reset) ($env.REGISTRY)/modules/($img.name)"
-    let digest = (
-        docker push --all-tags $"($env.REGISTRY)/modules/($img.name)"
-            | split row "\n"  | last | split row " " | get 2 # parse push output to get digest for signing
-    )
+        --build-arg $"NAME=($img.name)"
+        --push)
 
     print $"(ansi cyan)Signing image:(ansi reset) ($env.REGISTRY)/modules/($img.name)@($digest)"
     cosign sign -y --key env://COSIGN_PRIVATE_KEY $"($env.REGISTRY)/modules/($img.name)@($digest)"
