@@ -77,7 +77,7 @@ print $"(ansi green_bold)Starting image build(ansi reset)"
 $images | par-each { |img|
 
     print $"(ansi cyan)Building image:(ansi reset) modules/($img.name)"
-    (docker build --platform linux/($env.ARCH) .
+    (docker build --platform linux/$"($env.ARCH)" .
         -f ./individual.Containerfile
         ...($img.tags | each { |tag| ["-t", $"($env.REGISTRY)/modules/($img.name):($tag)"] } | flatten) # generate and spread list of tags
         --build-arg $"DIRECTORY=($img.directory)"
